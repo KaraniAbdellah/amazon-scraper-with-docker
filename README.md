@@ -33,76 +33,6 @@ Docker Containers:
 
 <img src="images/docker-screen.png"/>
 
-### 1. Main page
-
-```
-+--------------------------------------------------------------------+
-| Data Scraped        [Scrape new] [Re-scrape all]  [24 products]    |
-| Scraped 1 of 1 URLs.                       Data updated: 10:30 AM  |
-+--------------------------------------------------------------------+
-| [All (24)] [Laptops (12)] [Tablets (12)]                           |
-|--------------------------------------------------------------------|
-| [ Search products...                     ] [ Sort: Default      v ]|
-|                                                                    |
-| +----------------+  +----------------+  +----------------+         |
-| |    (image)     |  |    (image)     |  |    (image)     |         |
-| | [Laptops]      |  | [Laptops]      |  | [Laptops]      |         |
-| | Product title  |  | Product title  |  | Product title  |         |
-| | $472.00        |  | $959.00        |  | $620.00        |         |
-| | 4.1 out of 5   |  | 4.4 out of 5   |  | 4.0 out of 5   |         |
-| | 122 ratings    |  | 310 ratings    |  | 88 ratings     |         |
-| | [View on Amazon]| | [View on Amazon]| | [View on Amazon]|        |
-| +----------------+  +----------------+  +----------------+         |
-+--------------------------------------------------------------------+
-```
-
-- **Header (orange):** the title, the two buttons, the number of products shown, a status message, and the time the data was last updated.
-- **Tabs:** "All" plus one tab for each category. The number in brackets is how many products are in it.
-- **Search and sort:** filter the cards on the page. This does not call Amazon.
-- **Card:** image, category badge, title, price, rating, reviews, and a button that opens the product on Amazon.
-
-### 2. Loading
-
-```
-+--------------------------------------------------------------------+
-| Data Scraped        [Scrape new] [Re-scrape all]  (buttons off)    |
-| Checking for new URLs...                                           |
-+--------------------------------------------------------------------+
-| +----------------+  +----------------+  +----------------+         |
-| | ░░░░░░░░░░░░░░ |  | ░░░░░░░░░░░░░░ |  | ░░░░░░░░░░░░░░ |         |
-| | ░░░░░░         |  | ░░░░░░         |  | ░░░░░░         |         |
-| | ░░░░░░░░░░░░   |  | ░░░░░░░░░░░░   |  | ░░░░░░░░░░░░   |         |
-| +----------------+  +----------------+  +----------------+         |
-+--------------------------------------------------------------------+
-```
-
-- Placeholder cards pulse while data loads or while a scrape runs.
-- If you already have products, they stay on the page but look lighter. A few placeholder cards are added at the end.
-- Both buttons are turned off until the scrape ends.
-- When the new data arrives, the cards fade in. Each image fades in when it has loaded.
-
-### 3. Empty page
-
-```
-+--------------------------------------------------------------------+
-|                         No data yet.                               |
-+--------------------------------------------------------------------+
-```
-
-Shown when there are no products. It can also say "No products found." when your search text matches nothing.
-
-### 4. Scraper not ready
-
-```
-+--------------------------------------------------------------------+
-| Scraper is not reachable yet. Wait a few seconds and try again.    |
-+--------------------------------------------------------------------+
-```
-
-Shown in the header when the page cannot reach the API. This is normal for the first 30 seconds after you start Docker, because the scraper is installing its packages.
-
----
-
 ## Architecture
 
 ```mermaid
@@ -170,7 +100,7 @@ You need [Docker Desktop](https://www.docker.com/products/docker-desktop/). Make
    ```
 
 3. Wait about 30 seconds the first time. The scraper installs its packages.
-4. Open **http://localhost:8080**.
+4. Open **http://localhost:8080/index.html**.
 
 Useful commands:
 
@@ -252,21 +182,13 @@ Each line of `data/search_results_output.jsonl` is one product (JSON Lines forma
 
 ---
 
-## Problems and fixes
-
-| Problem | What to do |
-|---------|------------|
-| `failed to connect to the docker API` | Docker Desktop is not running. Open it and wait until it says "Engine running". |
-| The page says "Scraper is not reachable yet" | Wait 30 seconds. The scraper is still installing packages. |
-| The scraper finds 0 products | Amazon may have changed its page. Check the selectors in `selectors.yml`. |
-| Logs show "status 503" or "blocked" | Amazon is blocking you. Wait, use fewer searches, or try another network. |
-| The page is empty | Check `docker compose logs scraper`. Also check that `data/search_results_output.jsonl` exists. |
-| I changed a `.py` file and nothing happened | Run `docker compose restart scraper`. |
-
----
 
 ## Good to know
 
 - Amazon changes its pages often. If the scraper stops finding products, the selectors in `selectors.yml` probably need an update.
 - Amazon may block a lot of fast requests from one computer. The scraper waits 3 seconds between searches to be gentle.
 - Read and follow Amazon's rules about automated access before you use this on a large scale.
+
+
+
+Built with ❤️ by the community, from [scrapehero-code/amazon-scraper](https://github.com/scrapehero-code/amazon-scraper).
